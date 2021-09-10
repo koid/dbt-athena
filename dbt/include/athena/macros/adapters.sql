@@ -64,7 +64,7 @@
         table_name as name,
         table_schema as schema
       from {{ schema_relation.information_schema() }}.views
-      where LOWER(table_schema) = LOWER('{{ schema_relation.schema }}')
+      where table_schema = '{{ schema_relation.schema }}'
     ), tables AS (
       select
         table_catalog as database,
@@ -72,10 +72,10 @@
         table_schema as schema
 
       from {{ schema_relation.information_schema() }}.tables
-      where LOWER(table_schema) = LOWER('{{ schema_relation.schema }}')
+      where table_schema = '{{ schema_relation.schema }}'
 
       -- Views appear in both `tables` and `views`, so excluding them from tables
-      EXCEPT 
+      EXCEPT
 
       select * from views
     )
@@ -97,9 +97,9 @@
           null as numeric_scale
 
       from {{ relation.information_schema('columns') }}
-      where LOWER(table_name) = LOWER('{{ relation.identifier }}')
+      where table_name = '{{ relation.identifier }}'
         {% if relation.schema %}
-            and LOWER(table_schema) = LOWER('{{ relation.schema }}')
+            and table_schema = '{{ relation.schema }}'
         {% endif %}
       order by ordinal_position
 

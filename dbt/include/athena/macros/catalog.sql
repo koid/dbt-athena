@@ -67,7 +67,7 @@
                 )
 
                 {%- for schema in schemas -%}
-                select * from catalog where lower("table_schema") = lower('{{ schema }}')
+                select * from catalog where "table_schema" = '{{ schema }}'
                 {%- if not loop.last %} union all {% endif -%}
                 {%- endfor -%}
             )
